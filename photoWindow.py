@@ -5,7 +5,7 @@ import os
 
 
 def showPhoto():
-    root = tk.Tk()
+    root = tk.Toplevel()
     root.title('违章车辆检测')
     root.geometry('500x500')
 
@@ -61,8 +61,6 @@ def showPhoto():
 
     b1 = tk.Button(root, text='上一张', command=previous).pack(side='left')
     b2 = tk.Button(root, text='下一张', command=back).pack(side='right')
-
-    tk.mainloop()
 
 
 if __name__ == '__main__':
