@@ -16,6 +16,10 @@ index = 'index.txt'
 coco = "darknet/data/coco.names"
 
 
+def showText():
+    gText.insert("end", "控制台输出")
+
+
 # 检测车辆
 def extract_car(image_path):
     image = cv2.imread(image_path)
@@ -124,12 +128,13 @@ def extract_features_matching(feature, matching):
         return False
 
 
-def deal(beginX, beginY, endX, endY, occupyTime):
-    global gBeginX, gBeginY, gEndX, gEndY, gOccupyTime
+def deal(beginX, beginY, endX, endY, occupyTime, text):
+    global gBeginX, gBeginY, gEndX, gEndY, gOccupyTime, gText
     gBeginX = beginX
     gBeginY = beginY
     gEndX = endX
     gEndY = endY
+    gText = text
     gOccupyTime = int(occupyTime)
     # with open(index) as f:
     #     data = f.readlines()

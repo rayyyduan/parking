@@ -56,11 +56,9 @@ def showPhoto():
         filepath2 = os.path.join(fatherpath, files[fileindex])
         show_image(filepath2)
 
-    b = tk.Button(root, text='显示违章车辆', command=openpicture)
-    b.pack()
-
-    b1 = tk.Button(root, text='上一张', command=previous).pack(side='left')
-    b2 = tk.Button(root, text='下一张', command=back).pack(side='right')
+    tk.Button(root, text='显示违章车辆', command=openpicture).pack()
+    tk.Button(root, text='上一张', command=previous).pack(side='left')
+    tk.Button(root, text='下一张', command=back).pack(side='right')
 
 
 if __name__ == '__main__':
