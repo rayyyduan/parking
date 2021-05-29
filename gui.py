@@ -9,11 +9,15 @@ img = Image.open(path)
 if __name__ == '__main__':
     master = tk.Tk()
 
+    drawType = tk.IntVar(value=0)
     canDraw = tk.IntVar(value=0)
     beginX = tk.IntVar(value=0)
     beginY = tk.IntVar(value=0)
+    drawX = tk.IntVar(value=0)
+    drawY = tk.IntVar(value=0)
     endX = tk.IntVar(value=0)
     endY = tk.IntVar(value=0)
+    lastDraw = 0
 
     photo = ImageTk.PhotoImage(img)
     canvas = tk.Canvas(master, bg='white', width=800, height=600)
@@ -23,29 +27,46 @@ if __name__ == '__main__':
 
     def onLeftButtonDown(event):
         canDraw.set(1)
+        print(event.x)
         beginX.set(event.x)
         beginY.set(event.y)
+        drawX.set(event.x)
+        drawY.set(event.y)
 
 
     def onLeftButtonMove(event):
         global lastDraw
         if canDraw.get() == 0:
             return
-
-        # 先删除矩形，再画一个矩形，没什么用，只是看着舒服点
-        try:
-            canvas.delete(lastDraw)
-        except Exception as e:
-            pass
-        lastDraw = canvas.create_rectangle(beginX.get(), beginY.get(), event.x, event.y)
+        if drawType.get() == 1:
+            canvas.create_line(drawX.get(), drawY.get(), event.x, event.y)
+            drawX.set(event.x)
+            drawY.set(event.y)
+        elif drawType.get() == 2:
+            # 先删除矩形，再画一个矩形，没什么用，只是看着舒服点
+            try:
+                canvas.delete(lastDraw)
+            except Exception as e:
+                pass
+            lastDraw = canvas.create_rectangle(beginX.get(), beginY.get(), event.x, event.y)
 
 
     def onLeftButtonUp(event):
-        canvas.create_rectangle(beginX.get(), beginY.get(), event.x, event.y)
+        if drawType.get() == 1:
+            print(beginX.get())
+            canvas.create_line(beginX.get(), beginY.get(), event.x, event.y)
+        if drawType.get() == 2:
+            canvas.create_rectangle(beginX.get(), beginY.get(), event.x, event.y)
         endX.set(event.x)
         endY.set(event.y)
         canDraw.set(0)
 
+    def onRightButtonUp(event):
+        menu.post(event.x_root, event.y_root)
+
+    menu = tk.Menu(master, tearoff=0)
+    menu.add_command(label='Curve', command=lambda: drawType.set(1))
+    menu.add_command(label='Rectangle', command=lambda: drawType.set(2))
 
     canvas.bind('<Button-1>', onLeftButtonDown)
     canvas.bind('<B1-Motion>', onLeftButtonMove)
@@ -55,7 +76,7 @@ if __name__ == '__main__':
     def threadFun():
         try:
             time = int(e2.get())
-        except Exception:
+        except Exception as e:
             time = 1
             pass
         finally:
@@ -88,4 +109,5 @@ if __name__ == '__main__':
     text.insert("end", "控制台输出")
     outputBar.grid(row=0, column=1)
 
+    canvas.bind('<ButtonRelease-3>', onRightButtonUp)
     master.mainloop()
