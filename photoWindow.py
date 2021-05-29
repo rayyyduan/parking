@@ -42,17 +42,15 @@ def showPhoto():
 
     def previous():
         global fileindex, fatherpath, files, file_num
-        fileindex -= 1
-        if fileindex == -1:
-            fileindex = file_num - 1
+        if fileindex > 0:
+            fileindex -= 1
         filepath1 = os.path.join(fatherpath, files[fileindex])
         show_image(filepath1)
 
     def back():
         global fileindex, fatherpath, files, file_num
-        fileindex += 1
-        if fileindex == file_num:
-            fileindex = 0
+        if fileindex < file_num - 1:
+            fileindex += 1
         filepath2 = os.path.join(fatherpath, files[fileindex])
         show_image(filepath2)
 

@@ -87,7 +87,7 @@ def extract_car(image_path):
 # 提取特征
 def extract_features(image):
     # 启动SIFT检测器
-    sift = cv2.xfeatures2d.SIFT_create()
+    sift = cv2.SIFT_create()
 
     # 使用SIFT查找关键点和描述符
     kp, des = sift.detectAndCompute(image, None)
