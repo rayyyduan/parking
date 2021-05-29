@@ -16,8 +16,15 @@ index = 'index.txt'
 coco = "darknet/data/coco.names"
 
 
-def showText():
-    gText.insert("end", "控制台输出")
+def showText(textStr, end='\n'):
+    gText.insert("end", textStr)
+    if '\n' == end:
+        gText.insert("end", "\n")
+
+
+def mPrint(*args, sep=' ', end='\n', file=None):
+    print(*args, end=end)
+    showText(args[0], end)
 
 
 # 检测车辆
@@ -173,7 +180,7 @@ def deal(beginX, beginY, endX, endY, occupyTime, text):
         classes = f.read().rstrip('\n').split('\n')
 
     # 加载在COCO训练集上训练的预训练集YOLO对象检测器（80类）
-    print('loading YOLO...')
+    mPrint('loading YOLO...')
     global net
     net = cv2.dnn.readNetFromDarknet('darknet/cfg/yolov3.cfg', 'yolov3.weights')
     net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
@@ -199,36 +206,36 @@ def deal(beginX, beginY, endX, endY, occupyTime, text):
                 occupied = True
                 occupied_feature = cur_car_feature
                 start = files[i][6:-4]
-                print('found car at ' + start, end='')
+                mPrint('found car at ' + start, end='')
 
             # 如果位置被占用，则比较这两辆车以检查它们是否相同
             else:
                 # 如果不是同一辆车，计算停车时间
                 if not extract_features_matching(cur_car_feature, occupied_feature):
                     duration = int((int(files[i][6:-4]) - int(start)) / 60)
-                    print(' parked until ' + files[i - 1][6:-4] + '(%s minutes).' % duration)
+                    mPrint(' parked until ' + files[i - 1][6:-4] + '(%s minutes).' % duration)
                     if gOccupyTime < duration:
-                        print('！！！车辆违规占用消防车道，已拍照留证！！！')
+                        mPrint('！！！车辆违规占用消防车道，已拍照留证！！！')
                         image = cv2.imread('image/' + start + '.jpg')
-                        print('image/' + start + '.jpg')
+                        mPrint('image/' + start + '.jpg')
                         name = 'output/' + start + '-%smin.jpg' % duration
                         cv2.imwrite(name, image)
-                        print('...wrote output/' + start + '-%smin.jpg' % duration)
+                        mPrint('...wrote output/' + start + '-%smin.jpg' % duration)
                     start = files[i][6:-4]
-                    print('found car at ' + start, end='')
+                    mPrint('found car at ' + start, end='')
                 occupied_feature = cur_car_feature
         # 如果在当前img的该位置没有找到汽车
         else:
             if occupied:
                 duration = int((int(files[i][6:-4]) - int(start)) / 60)
-                print(' parked until ' + files[i - 1][6:-4] + '(%s minutes).' % duration)
+                mPrint(' parked until ' + files[i - 1][6:-4] + '(%s minutes).' % duration)
                 if gOccupyTime < duration:
-                    print('！！！车辆违规占用消防车道，已拍照留证！！！')
+                    mPrint('！！！车辆违规占用消防车道，已拍照留证！！！')
                     image = cv2.imread('image/' + start + '.jpg')
-                    print('image/' + start + '.jpg')
+                    mPrint('image/' + start + '.jpg')
                     name = 'output/' + start + '-%smin.jpg' % duration
                     cv2.imwrite(name, image)
-                    print('...wrote output/' + start + '-%smin.jpg' % duration)
+                    mPrint('...wrote output/' + start + '-%smin.jpg' % duration)
 
                 occupied_feature = None
                 start = None

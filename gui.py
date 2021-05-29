@@ -27,7 +27,6 @@ if __name__ == '__main__':
 
     def onLeftButtonDown(event):
         canDraw.set(1)
-        print(event.x)
         beginX.set(event.x)
         beginY.set(event.y)
         drawX.set(event.x)
@@ -53,7 +52,6 @@ if __name__ == '__main__':
 
     def onLeftButtonUp(event):
         if drawType.get() == 1:
-            print(beginX.get())
             canvas.create_line(beginX.get(), beginY.get(), event.x, event.y)
         if drawType.get() == 2:
             canvas.create_rectangle(beginX.get(), beginY.get(), event.x, event.y)
@@ -106,7 +104,6 @@ if __name__ == '__main__':
     outputBar = tk.Frame()
     text = tk.Text(outputBar, height=30, width=50)
     text.grid(sticky=tk.N)
-    text.insert("end", "控制台输出")
     outputBar.grid(row=0, column=1)
 
     canvas.bind('<ButtonRelease-3>', onRightButtonUp)
